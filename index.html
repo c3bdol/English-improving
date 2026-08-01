@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>خطة عبدول - B2 → C1 English Roadmap for Pentesting & CS</title>
+    
+    <!-- Google Fonts (Readex Pro & Cairo) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Readex+Pro:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/styles.css?v=200">
+
+    <!-- Canvas Confetti CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+</head>
+<body>
+
+    <div class="mobile-app-wrapper">
+        
+        <!-- Sticky Header with Streak, Shield & XP -->
+        <header class="app-header">
+            <div class="header-top">
+                <div class="user-profile">
+                    <div class="avatar-icon"><i class="fas fa-map-marked-alt"></i></div>
+                    <div class="user-info">
+                        <h2>خطة عبدول</h2>
+                        <span id="cefr-level">مبتدئ الـ Bug Bounty 🐣 — 0 XP</span>
+                    </div>
+                </div>
+                <div class="stats-badges-header">
+                    <div class="stat-pill flame">
+                        <i class="fas fa-fire"></i>
+                        <span id="streak-counter">0</span> أيام
+                    </div>
+                    <div class="stat-pill shield" title="درع حماية الستريك من الكسر">
+                        <i class="fas fa-shield-alt" style="color:var(--accent-cyan);"></i>
+                        <span id="shield-counter">0</span>
+                    </div>
+                    <div class="stat-pill xp">
+                        <i class="fas fa-bolt"></i>
+                        <span id="xp-counter">0</span> XP
+                    </div>
+                </div>
+            </div>
+
+            <!-- Daily Quote Glass Widget -->
+            <div id="daily-quote-widget" class="glass-quote"></div>
+
+            <!-- Top Navigation Bar -->
+            <nav class="top-nav-bar">
+                <button class="nav-item-btn active" id="nav-btn-tasks" onclick="window.app.switchTab('tasks')">
+                    <i class="fas fa-scroll"></i>
+                    <span>المهام</span>
+                </button>
+                <button class="nav-item-btn" id="nav-btn-timer" onclick="window.app.switchTab('timer')">
+                    <i class="fas fa-hourglass-half"></i>
+                    <span>المؤقت</span>
+                </button>
+                <button class="nav-item-btn" id="nav-btn-vocab" onclick="window.app.switchTab('vocab')">
+                    <i class="fas fa-hat-wizard"></i>
+                    <span>المهارات</span>
+                </button>
+                <button class="nav-item-btn" id="nav-btn-errorlog" onclick="window.app.switchTab('errorlog')">
+                    <i class="fas fa-crosshairs"></i>
+                    <span>نقاط الضعف</span>
+                </button>
+                <button class="nav-item-btn" id="nav-btn-badges" onclick="window.app.switchTab('badges')">
+                    <i class="fas fa-user-ninja"></i>
+                    <span>شخصيتك</span>
+                </button>
+            </nav>
+        </header>
+
+
+
+        <!-- Tab View 1: Daily Tasks (Main View) -->
+        <div class="tab-view active" id="view-tasks">
+            <!-- 30-Day Calendar Strip Selector -->
+            <div class="thirty-day-wrapper">
+                <div class="thirty-day-header-row">
+                    <span class="thirty-day-title"><i class="fas fa-calendar-alt"></i> الخطة اليومية</span>
+                    <span class="current-week-badge" id="current-week-label">الأسبوع 1</span>
+                </div>
+                <div class="thirty-day-scroll" id="thirty-day-tabs">
+                    <!-- Rendered dynamically -->
+                </div>
+            </div>
+
+            <!-- Active Day Indicator Banner -->
+            <div class="active-day-banner" id="active-day-banner">
+                <!-- Rendered dynamically -->
+            </div>
+
+            <!-- Task List Cards -->
+            <div class="tasks-container" id="daily-tasks-list">
+                <!-- Rendered dynamically -->
+            </div>
+        </div>
+
+
+        <!-- Tab View 3: Timer & Pomodoro (Enlarged Glowing Ring Design) -->
+        <div class="tab-view" id="view-timer">
+            <div class="timer-container">
+                <h3 id="timer-block-name" style="color:var(--accent-cyan); margin-bottom: 6px;">المؤقت الذكي لتاسك التركيز</h3>
+                <p style="font-size:12px; color:var(--text-secondary); margin-bottom:12px;">عند انتهاء الوقت يكتمل التاسك تلقائياً وتكسب +25 XP!</p>
+                
+                <div class="timer-circle-wrapper creative-timer-wrapper">
+                    <svg class="timer-svg" viewBox="0 0 240 240">
+                        <defs>
+                            <linearGradient id="timer-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#38bdf8" />
+                                <stop offset="50%" stop-color="#34d399" />
+                                <stop offset="100%" stop-color="#c084fc" />
+                            </linearGradient>
+                        </defs>
+                        <circle class="timer-bg-circle" cx="120" cy="120" r="95"></circle>
+                        <circle class="timer-progress-ring" id="timer-progress-ring" cx="120" cy="120" r="95"></circle>
+                    </svg>
+                    <div class="timer-text-display" id="timer-display">25:00</div>
+                </div>
+
+                <div class="timer-controls">
+                    <button class="btn btn-primary" onclick="appTimer.start()"><i class="fas fa-play"></i> ابدأ المؤقت</button>
+                    <button class="btn btn-secondary" onclick="appTimer.pause()"><i class="fas fa-pause"></i> إيقاف</button>
+                    <button class="btn btn-secondary" onclick="appTimer.reset()"><i class="fas fa-undo"></i> إعادة</button>
+                </div>
+
+                <div style="margin-top:12px;">
+                    <button class="btn-fast-complete" onclick="appTimer.completeNow()">
+                        <i class="fas fa-bolt"></i> إنهاء المؤقت فوراً واحتساب التاسك
+                    </button>
+                </div>
+
+                <div class="timer-preset-btns">
+                    <button class="btn-chip" onclick="appTimer.setDuration(25, 'Speaking Practice (25 min)', 'block-1')">25 دقيقة (Speaking Practice)</button>
+                    <button class="btn-chip" onclick="appTimer.setDuration(15, 'Vocab & Anki (15 min)', 'block-2')">15 دقيقة (أنكي)</button>
+                    <button class="btn-chip" onclick="appTimer.setDuration(15, 'Rotating Focus (15 min)', 'block-3')">15 دقيقة (التدوير)</button>
+                    <button class="btn-chip" onclick="appTimer.setDuration(5, 'Session Close (5 min)', 'block-4')">5 دقائق (إنهاء)</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab View 4: Simplified Vocabulary & Anki Cards with Categories -->
+        <div class="tab-view" id="view-vocab">
+            <div style="padding: 16px;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+                    <h3 style="color:var(--accent-gold);"><i class="fas fa-magic"></i> مستودع المهارات والتعاويذ</h3>
+                    <button class="btn btn-primary" style="padding:6px 12px; font-size:12px;" onclick="window.app.exportAnkiCards()">
+                        <i class="fas fa-download"></i> تصدير لـ Anki
+                    </button>
+                </div>
+
+                <!-- Full 8-Field Vocabulary Card Form (Roadmap Standard) -->
+                <div class="form-card">
+                    <h4 style="font-size:14px; color:var(--text-primary); margin-bottom:10px;"><i class="fas fa-scroll"></i> اكتساب مهارة/تعويذة جديدة</h4>
+                    <form id="vocab-form" onsubmit="window.app.addNewVocabCard(event)">
+                        <div class="form-group">
+                            <label>الكلمة / التركيب (Word / Phrase): *</label>
+                            <input type="text" id="v-word" class="form-control" placeholder="e.g. Mitigate" required>
+                        </div>
+                        <div class="form-group">
+                            <label>المعنى بالعربي / التوضيح: *</label>
+                            <input type="text" id="v-meaning" class="form-control" placeholder="e.g. يقلل من حدة / يخفف المخاطر" required>
+                        </div>
+                        <div class="form-group">
+                            <label style="color:var(--accent-gold); font-weight:bold;">الجملة من إنشائي (My Own Sentence): * (إجباري — للإنتاج النشط)</label>
+                            <input type="text" id="v-mysentence" class="form-control" placeholder="e.g. The SOC team deployed rate limiting to mitigate DDoS vectors." required>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-block"><i class="fas fa-gem"></i> توثيق التعويذة في السجل</button>
+                    </form>
+                </div>
+
+                <!-- Categorized Vocab Buckets -->
+                <div id="vocab-cards-list">
+                    <!-- Rendered dynamically -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab View 5: Error Log Tracker ("كشكول الغلطات") -->
+        <div class="tab-view" id="view-errorlog">
+            <div style="padding: 16px;">
+                <h3 style="color:var(--accent-flame); margin-bottom:16px;"><i class="fas fa-skull-crossbones"></i> سجل نقاط الضعف</h3>
+                <p style="font-size:12px; color:var(--text-secondary); margin-bottom:16px;">اكتشف نقاط ضعفك وعالجها لترفع مستواك القتالي.</p>
+
+                <!-- Single Error Entry Form -->
+                <div class="form-card">
+                    <h4 style="font-size:14px; color:var(--text-primary); margin-bottom:10px;"><i class="fas fa-crosshairs"></i> توثيق نقطة ضعف جديدة</h4>
+                    <form id="error-log-form" onsubmit="window.app.addNewErrorLog(event)">
+                        <div class="form-group">
+                            <label>الجملة الخاطئة: *</label>
+                            <input type="text" id="err-wrong" class="form-control" placeholder="e.g. A significant problem happened." required>
+                        </div>
+                        <div class="form-group">
+                            <label>الجملة الصحيحة: *</label>
+                            <input type="text" id="err-correct" class="form-control" placeholder="e.g. A significant issue arose." required>
+                        </div>
+                        <div class="form-group">
+                            <label>ملاحظة التعديل (اختياري):</label>
+                            <input type="text" id="err-note" class="form-control" placeholder="e.g. استخدم arose مع issue بدل الخلط">
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-block"><i class="fas fa-shield-alt"></i> توثيق الثغرة</button>
+                    </form>
+                </div>
+
+                <!-- Fast Local Bulk Text Parser -->
+                <div class="form-card">
+                    <h4 style="font-size:14px; color:var(--accent-purple); margin-bottom:10px;"><i class="fas fa-magic"></i> فحص تلقائي للمعركة (Bulk Parser)</h4>
+                    <p style="font-size:11px; color:var(--text-muted); margin-bottom:8px;">الصق نص الأخطاء مباشرة وسيتم استخراج الجمل الخاطئة والصحيحة والملاحظات وإضافتها فوراً!</p>
+                    <form id="error-bulk-form" onsubmit="window.app.addBulkErrorLog(event)">
+                        <div class="form-group">
+                            <textarea id="err-bulk-text" class="form-control" rows="4" placeholder="مثال:\n❌ I would go yesterday\n✅ I would have gone yesterday\n💡 3rd Conditional"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-secondary btn-block"><i class="fas fa-bolt"></i> تحليل المعركة واستخراج الأخطاء ⚡</button>
+                    </form>
+                </div>
+
+                <!-- Error Logs List -->
+                <div id="error-log-list">
+                    <!-- Rendered dynamically -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab View 6: Profile & Achievements ("بروفايلك") -->
+        <div class="tab-view" id="view-badges">
+            <div style="padding: 16px;">
+                <h3 style="color:var(--accent-gold); margin-bottom:10px;"><i class="fas fa-id-card"></i> شخصيتك وإنجازاتك</h3>
+                
+                <!-- Overall Progress Bars -->
+                <div class="progress-section" style="padding:0; margin-bottom:20px;">
+                    <div class="progress-box">
+                        <div class="progress-label-row">
+                            <span><i class="fas fa-tasks"></i> نسبة إنجاز الـ 60 دقيقة اليوم:</span>
+                            <span id="daily-progress-percent" style="color:var(--accent-cyan);">0%</span>
+                        </div>
+                        <div class="progress-bar-track">
+                            <div class="progress-bar-fill cyan" id="daily-progress-bar" style="width: 0%;"></div>
+                        </div>
+                    </div>
+
+                    <div class="progress-box">
+                        <div class="progress-label-row">
+                            <span><i class="fas fa-calendar-check"></i> تقدم خطة الـ 30 يوم بالكامل:</span>
+                            <span id="thirty-day-progress-percent" style="color:var(--accent-gold);">0/30 يوم</span>
+                        </div>
+                        <div class="progress-bar-track">
+                            <div class="progress-bar-fill gold" id="thirty-day-progress-bar" style="width: 0%;"></div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <!-- 30-Day Roadmap Guidelines & Habits Card -->
+                <div class="form-card" style="border:1px solid var(--accent-gold); margin-bottom:20px;">
+                    <h4 style="font-size:14px; color:var(--accent-gold); margin-bottom:10px;"><i class="fas fa-compass"></i> إرشادات ومبادئ خطة الـ 30 يوم (B2 → C1 Roadmap)</h4>
+                    
+                    <div style="margin-bottom:12px;">
+                        <h5 style="font-size:12px; color:var(--accent-flame); margin-bottom:6px;"><i class="fas fa-exclamation-triangle"></i> أخطاء يجب تجنبها طوال الـ 30 يوم (Mistakes to Avoid):</h5>
+                        <ul style="font-size:11px; color:var(--text-secondary); line-height:1.6; padding-right:16px;">
+                            <li><strong>استهلاك المدخلات بدلاً من الإنتاج:</strong> القراءة والاستماع ممتازين في B2، التكرار بدون إنتاج تحدث وكتابة مفيش منه عائد جديد.</li>
+                            <li><strong>دراسة الكلمات بشكل مجرد:</strong> احفظ الكلمة دائماً مع متلازماتها اللفظية (Collocations) وفي جملتك الخاصة الإجبارية.</li>
+                            <li><strong>الاعتماد الكلي على تصحيح كل شيء:</strong> ركز على 2-3 أخطاء متكررة رئيسية في الجلسة لبناء التثبيت الحقيقي.</li>
+                            <li><strong>التنقل بين الأنشطة بدافع الملل:</strong> التكرار الأسبوعي مقصود لبناء التلقائية والـ Automaticity.</li>
+                            <li><strong>تفويت مراجعة الأحد:</strong> لو وقتك ضيق في الأحد، راجع بطاقات أنكي وكشكول الغلطات أولاً.</li>
+                        </ul>
+                    </div>
+
+                    <div>
+                        <h5 style="font-size:12px; color:var(--accent-emerald); margin-bottom:6px;"><i class="fas fa-bolt"></i> عادات تسرّع تطورك للـ C1 (Habits for Fastest Progress):</h5>
+                        <ul style="font-size:11px; color:var(--text-secondary); line-height:1.6; padding-right:16px;">
+                            <li>كتابة جملتك الخاصة (My Own Sentence) لكل كلمة جديدة بدون استثناء.</li>
+                            <li>التحدث اليومي المتواصل دون التوقف في منتصف الجملة لتصحيح الأخطاء أثناء الكلام.</li>
+                            <li>المراجعة الفعلية لكشكول الغلطات بانتظام بدلاً من تجميع التصحيحات وإهمالها.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <h4 style="color:var(--accent-gold); font-size:14px; margin-bottom:10px;"><i class="fas fa-trophy"></i> شارات الإنجازات والـ Badges</h4>
+                <div class="badges-grid" id="badges-grid">
+                    <!-- Rendered dynamically -->
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Task Instruction Modal Drawer -->
+        <div class="modal-overlay" id="task-modal">
+            <div class="modal-content-drawer">
+                <div class="modal-header-row">
+                    <h3 id="modal-task-title">تعليمات التاسك</h3>
+                    <button class="btn-close-modal" onclick="window.app.closeModal()">&times;</button>
+                </div>
+                <div id="modal-body-content">
+                    <!-- Rendered dynamically -->
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Application Scripts with Cache Buster -->
+    <script src="js/audio.js?v=202"></script>
+    <script src="js/gemini.js?v=202"></script>
+    <script src="js/roadmapData.js?v=202"></script>
+    <script src="js/timer.js?v=202"></script>
+    <script src="js/vocab.js?v=201"></script>
+    <script src="js/errorlog.js?v=201"></script>
+    <script src="js/app.js?v=201"></script>
+</body>
+</html>
